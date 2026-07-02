@@ -60,6 +60,10 @@ liveness path at 'https://YOUR-SERVICE.onrender.com/healthz'.
 
 For a manual Render service use 'Dockerfile.api' and health path '/healthz'.
 
+Render terminates public HTTPS at its managed proxy, so keep 'FORCE_HTTPS=0'
+there. Enable application-level HTTPS redirects only when proxy forwarding is
+configured and trusted explicitly.
+
 ## Frontend on Vercel
 
 Import this repository and set the Vercel **Root Directory** to 'frontend'.
