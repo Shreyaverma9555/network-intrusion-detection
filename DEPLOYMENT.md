@@ -39,6 +39,10 @@ postgresql://USER:PASSWORD@HOST:6543/postgres?sslmode=require
 
 Set it as 'NID_POSTGRES_DSN' only on the backend.
 
+The backend initializes the schema automatically. For manual Supabase setup,
+open **SQL Editor -> New Query**, paste
+'deploy/supabase/schema.sql', and click **Run**. The script is idempotent.
+
 ## Backend on Render
 
 Push the repository to GitHub, create a Render Blueprint, and select
