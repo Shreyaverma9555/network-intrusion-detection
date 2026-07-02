@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: nid-soc-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SECRET_KEY
+        generateValue: true
+      - key: NID_SENSOR_API_KEY
+        generateValue: true
+      - key: NID_API_USERS_JSON
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: RATE_LIMIT_PER_MINUTE
+        value: "120"
+      - key: FORCE_HTTPS
+        value: "1"
+      - key: PYTHON_VERSION
+        value: 3.11.9

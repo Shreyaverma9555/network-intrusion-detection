@@ -1,0 +1,92 @@
+{
+  "rows": 16,
+  "features": [
+    "time_delta",
+    "protocol",
+    "src_port",
+    "dst_port",
+    "packet_length",
+    "tcp_flags",
+    "src_private",
+    "dst_private",
+    "bytes_per_second",
+    "packets_per_src",
+    "packets_per_dst"
+  ],
+  "accuracy": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "roc_auc": 1.0,
+  "brier_score_raw": 0.012736692380699157,
+  "brier_score_calibrated": 0.008101123487017919,
+  "expected_calibration_error_raw": 0.09489235508795457,
+  "expected_calibration_error_calibrated": 0.0711088552391187,
+  "calibration_method": "logistic",
+  "calibration_bins": [
+    {
+      "bin_start": 0.0,
+      "bin_end": 0.1,
+      "count": 1,
+      "mean_score": 0.031633325902188696,
+      "observed_attack_rate": 0.0,
+      "gap": 0.031633325902188696
+    },
+    {
+      "bin_start": 0.1,
+      "bin_end": 0.2,
+      "count": 1,
+      "mean_score": 0.16530942915040325,
+      "observed_attack_rate": 0.0,
+      "gap": 0.16530942915040325
+    },
+    {
+      "bin_start": 0.9,
+      "bin_end": 1.0,
+      "count": 2,
+      "mean_score": 0.9562536670480586,
+      "observed_attack_rate": 1.0,
+      "gap": 0.04374633295194141
+    }
+  ],
+  "raw_calibration_bins": [
+    {
+      "bin_start": 0.0,
+      "bin_end": 0.1,
+      "count": 1,
+      "mean_score": 0.04995877549062887,
+      "observed_attack_rate": 0.0,
+      "gap": 0.04995877549062887
+    },
+    {
+      "bin_start": 0.1,
+      "bin_end": 0.2,
+      "count": 1,
+      "mean_score": 0.19870268044196082,
+      "observed_attack_rate": 0.0,
+      "gap": 0.19870268044196082
+    },
+    {
+      "bin_start": 0.9,
+      "bin_end": 1.0,
+      "count": 2,
+      "mean_score": 0.9345460177903857,
+      "observed_attack_rate": 1.0,
+      "gap": 0.06545398220961429
+    }
+  ],
+  "confusion_matrix": [
+    [
+      2,
+      0
+    ],
+    [
+      0,
+      2
+    ]
+  ],
+  "test_rows": 4,
+  "normal_rows": 7,
+  "attack_rows": 9,
+  "evaluation_warning": "Metrics are not deployment-grade because the evaluation set is too small."
+}

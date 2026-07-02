@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nid-soc-frontend
+  namespace: nid-soc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nid-soc-frontend
+  template:
+    metadata:
+      labels:
+        app: nid-soc-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/YOUR_ORG/nid-soc-frontend:latest
+          ports:
+            - name: http
+              containerPort: 80
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nid-soc-frontend
+  namespace: nid-soc
+spec:
+  selector:
+    app: nid-soc-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

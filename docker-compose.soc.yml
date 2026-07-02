@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: nid
+      POSTGRES_USER: nid_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - soc_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nid_user -d nid"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NID_POSTGRES_DSN: postgresql://nid_user:${POSTGRES_PASSWORD}@postgres:5432/nid
+      NID_JWT_SECRET: ${NID_JWT_SECRET:?Set NID_JWT_SECRET}
+      NID_SENSOR_API_KEY: ${NID_SENSOR_API_KEY:?Set NID_SENSOR_API_KEY}
+      NID_API_USERS_JSON: ${NID_API_USERS_JSON:?Set NID_API_USERS_JSON}
+      NID_API_CORS_ORIGINS: http://localhost:8080
+      NID_SERVER_ALERTS: ${NID_SERVER_ALERTS:-0}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      NID_EMAIL_TO: ${NID_EMAIL_TO:-}
+      NID_EMAIL_FROM: ${NID_EMAIL_FROM:-nid-alerts@localhost}
+      NID_SMTP_HOST: ${NID_SMTP_HOST:-}
+      NID_SMTP_PORT: ${NID_SMTP_PORT:-587}
+      NID_SMTP_TLS: ${NID_SMTP_TLS:-1}
+      NID_SMTP_USERNAME: ${NID_SMTP_USERNAME:-}
+      NID_SMTP_PASSWORD: ${NID_SMTP_PASSWORD:-}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_FROM: ${TWILIO_FROM:-}
+      TWILIO_TO: ${TWILIO_TO:-}
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  soc_postgres:

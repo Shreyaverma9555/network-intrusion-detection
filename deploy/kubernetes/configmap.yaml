@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nid-soc-config
+  namespace: nid-soc
+data:
+  NID_API_CORS_ORIGINS: "https://soc.example.com"
+  NID_SERVER_ALERTS: "0"
+  NID_JWT_MINUTES: "60"

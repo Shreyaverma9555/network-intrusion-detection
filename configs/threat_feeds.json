@@ -1,0 +1,18 @@
+{
+  "ip_reputation": [
+    {
+      "ip": "203.0.113.66",
+      "score": 92,
+      "country": "Documentation",
+      "provider": "Local demo feed",
+      "labels": ["Known malware host", "Placement demo blacklist"]
+    },
+    {
+      "cidr": "198.51.100.0/24",
+      "score": 85,
+      "country": "Documentation",
+      "provider": "Local demo feed",
+      "labels": ["Botnet command-and-control range", "Placement demo blacklist"]
+    }
+  ]
+}

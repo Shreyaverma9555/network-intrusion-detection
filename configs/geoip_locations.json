@@ -1,0 +1,31 @@
+{
+  "ip_locations": [
+    {
+      "ip": "203.0.113.66",
+      "country": "United States",
+      "latitude": 37.0902,
+      "longitude": -95.7129,
+      "provider": "Local GeoIP demo feed"
+    },
+    {
+      "cidr": "198.51.100.0/24",
+      "country": "India",
+      "latitude": 20.5937,
+      "longitude": 78.9629,
+      "provider": "Local GeoIP demo feed"
+    },
+    {
+      "ip": "8.8.8.8",
+      "country": "United States",
+      "latitude": 37.751,
+      "longitude": -97.822,
+      "provider": "Local GeoIP demo feed"
+    }
+  ],
+  "country_centroids": {
+    "China": {"latitude": 35.8617, "longitude": 104.1954},
+    "India": {"latitude": 20.5937, "longitude": 78.9629},
+    "Russia": {"latitude": 61.524, "longitude": 105.3188},
+    "United States": {"latitude": 37.0902, "longitude": -95.7129}
+  }
+}

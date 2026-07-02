@@ -1,0 +1,146 @@
+{
+  "categories": {
+    "Port Scan": [
+      {
+        "technique_id": "T1046",
+        "technique": "Network Service Discovery",
+        "tactic": "Discovery",
+        "url": "https://attack.mitre.org/techniques/T1046/",
+        "description": "Adversaries may scan hosts and ports to discover services."
+      }
+    ],
+    "Probe": [
+      {
+        "technique_id": "T1046",
+        "technique": "Network Service Discovery",
+        "tactic": "Discovery",
+        "url": "https://attack.mitre.org/techniques/T1046/",
+        "description": "Reconnaissance-style probing can indicate service discovery."
+      }
+    ],
+    "SYN Flood": [
+      {
+        "technique_id": "T1498",
+        "technique": "Network Denial of Service",
+        "tactic": "Impact",
+        "url": "https://attack.mitre.org/techniques/T1498/",
+        "description": "High-volume SYN traffic can exhaust network or service resources."
+      }
+    ],
+    "UDP Flood": [
+      {
+        "technique_id": "T1498",
+        "technique": "Network Denial of Service",
+        "tactic": "Impact",
+        "url": "https://attack.mitre.org/techniques/T1498/",
+        "description": "High-volume UDP traffic can degrade availability."
+      }
+    ],
+    "ICMP Flood": [
+      {
+        "technique_id": "T1498",
+        "technique": "Network Denial of Service",
+        "tactic": "Impact",
+        "url": "https://attack.mitre.org/techniques/T1498/",
+        "description": "High-volume ICMP traffic can degrade availability."
+      }
+    ],
+    "DoS": [
+      {
+        "technique_id": "T1498",
+        "technique": "Network Denial of Service",
+        "tactic": "Impact",
+        "url": "https://attack.mitre.org/techniques/T1498/",
+        "description": "Denial-of-service behavior can affect network availability."
+      }
+    ],
+    "DDoS": [
+      {
+        "technique_id": "T1498.001",
+        "technique": "Direct Network Flood",
+        "tactic": "Impact",
+        "url": "https://attack.mitre.org/techniques/T1498/001/",
+        "description": "Distributed high-volume traffic can directly flood a victim service."
+      }
+    ],
+    "Brute Force": [
+      {
+        "technique_id": "T1110",
+        "technique": "Brute Force",
+        "tactic": "Credential Access",
+        "url": "https://attack.mitre.org/techniques/T1110/",
+        "description": "Repeated login attempts can indicate credential guessing."
+      }
+    ],
+    "R2L": [
+      {
+        "technique_id": "T1110",
+        "technique": "Brute Force",
+        "tactic": "Credential Access",
+        "url": "https://attack.mitre.org/techniques/T1110/",
+        "description": "Remote-to-local attempts often involve credential access behavior."
+      }
+    ],
+    "U2R": [
+      {
+        "technique_id": "T1068",
+        "technique": "Exploitation for Privilege Escalation",
+        "tactic": "Privilege Escalation",
+        "url": "https://attack.mitre.org/techniques/T1068/",
+        "description": "User-to-root behavior can resemble privilege escalation attempts."
+      }
+    ],
+    "DNS Tunneling": [
+      {
+        "technique_id": "T1048",
+        "technique": "Exfiltration Over Alternative Protocol",
+        "tactic": "Exfiltration",
+        "url": "https://attack.mitre.org/techniques/T1048/",
+        "description": "Long, unique DNS queries can indicate data exfiltration over DNS."
+      },
+      {
+        "technique_id": "T1071.004",
+        "technique": "Application Layer Protocol: DNS",
+        "tactic": "Command and Control",
+        "url": "https://attack.mitre.org/techniques/T1071/004/",
+        "description": "Adversaries may use DNS for command-and-control traffic."
+      }
+    ],
+    "ARP Spoofing": [
+      {
+        "technique_id": "T1557.002",
+        "technique": "Adversary-in-the-Middle: ARP Cache Poisoning",
+        "tactic": "Credential Access",
+        "url": "https://attack.mitre.org/techniques/T1557/002/",
+        "description": "Conflicting ARP IP-to-MAC claims can indicate ARP cache poisoning."
+      }
+    ],
+    "Botnet": [
+      {
+        "technique_id": "T1071",
+        "technique": "Application Layer Protocol",
+        "tactic": "Command and Control",
+        "url": "https://attack.mitre.org/techniques/T1071/",
+        "description": "Botnet traffic can use common application protocols for C2."
+      }
+    ],
+    "Malware": [
+      {
+        "technique_id": "T1105",
+        "technique": "Ingress Tool Transfer",
+        "tactic": "Command and Control",
+        "url": "https://attack.mitre.org/techniques/T1105/",
+        "description": "Malware-related network activity can involve payload transfer."
+      }
+    ]
+  },
+  "signatures": {
+    "SIG-PORT-SCAN": ["T1046"],
+    "SIG-SYN-FLOOD": ["T1498"],
+    "SIG-UDP-FLOOD": ["T1498"],
+    "SIG-ICMP-FLOOD": ["T1498"],
+    "SIG-BRUTE-FORCE": ["T1110"],
+    "SIG-ARP-SPOOF": ["T1557.002"],
+    "SIG-DNS-TUNNEL": ["T1048", "T1071.004"]
+  }
+}

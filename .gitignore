@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.env.aws
+deploy/kubernetes/secret.yaml
+data/*.db
+
+# Large local datasets and captures
+data/*.pcap
+data/*.pcapng
+data/*.csv
+!data/sample_training.csv
+!data/live_packets.csv
+
+# Trained artifacts
+models/*.joblib
+!models/sample_ensemble.joblib
+reports/*.json
+!reports/sample_metrics.json
+logs/*.log
+frontend/node_modules/
+frontend/dist/
+.vercel/

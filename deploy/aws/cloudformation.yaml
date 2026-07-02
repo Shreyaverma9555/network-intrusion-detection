@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: EC2 deployment for the Scapy Network Intrusion Detection dashboard
+
+Parameters:
+  GitRepository:
+    Type: String
+    Description: Public HTTPS Git repository containing this project
+  GitBranch:
+    Type: String
+    Default: main
+  AllowedDashboardCidr:
+    Type: String
+    Description: Your public IP in CIDR form, for example 203.0.113.10/32
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  PublicSubnetId:
+    Type: AWS::EC2::Subnet::Id
+    Description: Public subnet with automatic public IPv4 assignment and internet access
+  InstanceType:
+    Type: String
+    Default: t3.large
+    AllowedValues:
+      - t3.medium
+      - t3.large
+      - t3.xlarge
+
+Resources:
+  NidInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  NidInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref NidInstanceRole
+
+  NidSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Restricted access to the NID Streamlit dashboard
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 8501
+          ToPort: 8501
+          CidrIp: !Ref AllowedDashboardCidr
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+
+  NidInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: "{{resolve:ssm:/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id}}"
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref PublicSubnetId
+      IamInstanceProfile: !Ref NidInstanceProfile
+      MetadataOptions:
+        HttpEndpoint: enabled
+        HttpTokens: required
+      SecurityGroupIds:
+        - !GetAtt NidSecurityGroup.GroupId
+      BlockDeviceMappings:
+        - DeviceName: /dev/sda1
+          Ebs:
+            VolumeSize: 30
+            VolumeType: gp3
+            Encrypted: true
+            DeleteOnTermination: true
+      Tags:
+        - Key: Name
+          Value: network-intrusion-detection
+      UserData:
+        Fn::Base64: !Sub |
+          #!/usr/bin/env bash
+          set -euxo pipefail
+          apt-get update
+          apt-get install -y git
+          git clone --branch '${GitBranch}' '${GitRepository}' /opt/network-intrusion-detection
+          cd /opt/network-intrusion-detection
+          bash deploy/aws/install_ec2.sh /opt/network-intrusion-detection
+
+Outputs:
+  InstanceId:
+    Value: !Ref NidInstance
+  PublicIp:
+    Value: !GetAtt NidInstance.PublicIp
+  DashboardUrl:
+    Value: !Sub "http://${NidInstance.PublicDnsName}:8501"
+  SessionManager:
+    Value: !Sub "aws ssm start-session --target ${NidInstance}"

@@ -1,0 +1,12 @@
+[
+  "frame.time_epoch",
+  "ip.src",
+  "ip.dst",
+  "ip.proto",
+  "tcp.srcport",
+  "tcp.dstport",
+  "udp.srcport",
+  "udp.dstport",
+  "frame.len",
+  "tcp.flags"
+]

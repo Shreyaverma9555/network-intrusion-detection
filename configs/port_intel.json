@@ -1,0 +1,15 @@
+{
+  "21": {"service": "FTP", "risk": "Medium", "score": 30},
+  "22": {"service": "SSH", "risk": "High", "score": 55},
+  "23": {"service": "Telnet", "risk": "Critical", "score": 70},
+  "25": {"service": "SMTP", "risk": "Medium", "score": 30},
+  "53": {"service": "DNS", "risk": "Medium", "score": 25},
+  "80": {"service": "HTTP", "risk": "Low", "score": 10},
+  "135": {"service": "MSRPC", "risk": "High", "score": 50},
+  "139": {"service": "NetBIOS", "risk": "High", "score": 50},
+  "445": {"service": "SMB", "risk": "Critical", "score": 70},
+  "1433": {"service": "MSSQL", "risk": "High", "score": 55},
+  "3389": {"service": "RDP", "risk": "Critical", "score": 75},
+  "4444": {"service": "Common reverse shell", "risk": "Critical", "score": 80},
+  "5555": {"service": "ADB/Backdoor commonly abused", "risk": "Critical", "score": 80}
+}

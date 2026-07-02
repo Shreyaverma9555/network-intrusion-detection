@@ -1,0 +1,10 @@
+{
+  "203.0.113.66": {
+    "score": 92,
+    "labels": ["Known malware host", "Local demonstration blacklist"]
+  },
+  "198.51.100.77": {
+    "score": 85,
+    "labels": ["Botnet command-and-control", "Local demonstration blacklist"]
+  }
+}

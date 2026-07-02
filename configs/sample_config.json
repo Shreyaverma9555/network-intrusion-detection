@@ -1,0 +1,6 @@
+{
+  "attack_probability_threshold": 0.65,
+  "capture_window_seconds": 10,
+  "capture_interface": "Wi-Fi",
+  "model_path": "models/ensemble.joblib"
+}
