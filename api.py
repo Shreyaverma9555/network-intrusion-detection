@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 from datetime import datetime, timedelta, timezone
+import hashlib
 import hmac
 from io import BytesIO
 import json
@@ -152,9 +153,20 @@ class SensorEventResponse(BaseModel):
 
 def jwt_secret() -> str:
     secret = os.getenv("JWT_SECRET") or os.getenv("SECRET_KEY") or os.getenv("NID_JWT_SECRET")
-    if not secret:
-        raise HTTPException(status_code=500, detail="NID_JWT_SECRET is not configured")
-    return secret
+    if secret:
+        return secret
+    admin_password = os.getenv("NID_API_PASSWORD", "")
+    if admin_password:
+        return hashlib.pbkdf2_hmac(
+            "sha256",
+            admin_password.encode("utf-8"),
+            b"sentinel-nid-jwt-signing-v1",
+            390000,
+        ).hex()
+    raise HTTPException(
+        status_code=500,
+        detail="Configure JWT_SECRET or NID_API_PASSWORD",
+    )
 
 
 def current_user(token: str = Depends(oauth2)) -> dict[str, str]:

@@ -121,6 +121,28 @@ class ApiBackendTests(unittest.TestCase):
         self.assertEqual(response.json()["username"], "admin")
         self.assertEqual(response.json()["role"], "admin")
 
+    def test_login_derives_stable_jwt_secret_from_admin_password(self) -> None:
+        with patch.dict(
+            "os.environ",
+            {
+                "JWT_SECRET": "",
+                "SECRET_KEY": "",
+                "NID_JWT_SECRET": "",
+                "NID_API_PASSWORD": "strong-render-password",
+            },
+        ):
+            first = self.client.post(
+                "/auth/login",
+                data={"username": "admin", "password": "strong-render-password"},
+            )
+            second = self.client.post(
+                "/auth/login",
+                data={"username": "admin", "password": "strong-render-password"},
+            )
+
+        self.assertEqual(first.status_code, 200, first.text)
+        self.assertEqual(second.status_code, 200, second.text)
+
     def test_public_liveness_endpoint(self) -> None:
         response = self.client.get("/healthz")
 
