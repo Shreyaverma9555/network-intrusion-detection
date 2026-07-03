@@ -22,6 +22,8 @@ services:
         value: admin
       - key: CORS_ORIGINS
         value: http://localhost:5173
+      - key: CORS_ORIGIN_REGEX
+        value: 'https://.*\.vercel\.app'
       - key: ALLOWED_HOSTS
         value: "*.onrender.com"
       - key: RATE_LIMIT_PER_MINUTE

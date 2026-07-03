@@ -130,6 +130,22 @@ class ApiBackendTests(unittest.TestCase):
         self.assertEqual(self.client.get("/health").status_code, 200)
         self.assertIn("nid_api_requests_total", self.client.get("/metrics").text)
 
+    def test_vercel_cors_preflight(self) -> None:
+        response = self.client.options(
+            "/auth/login",
+            headers={
+                "Origin": "https://network-intrusion-detection-soc.vercel.app",
+                "Access-Control-Request-Method": "POST",
+                "Access-Control-Request-Headers": "content-type",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(
+            response.headers["access-control-allow-origin"],
+            "https://network-intrusion-detection-soc.vercel.app",
+        )
+
     def test_authenticated_websocket_stream_connects(self) -> None:
         with self.client.websocket_connect("/ws/events") as websocket:
             websocket.send_json({"token": self.token})
