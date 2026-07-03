@@ -14,12 +14,16 @@ services:
         generateValue: true
       - key: NID_SENSOR_API_KEY
         generateValue: true
-      - key: NID_API_USERS_JSON
+      - key: NID_API_USERNAME
+        value: admin
+      - key: NID_API_PASSWORD
         sync: false
+      - key: NID_API_ROLE
+        value: admin
       - key: CORS_ORIGINS
-        sync: false
+        value: http://localhost:5173
       - key: ALLOWED_HOSTS
-        sync: false
+        value: "*.onrender.com"
       - key: RATE_LIMIT_PER_MINUTE
         value: "120"
       - key: FORCE_HTTPS

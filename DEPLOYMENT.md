@@ -6,24 +6,15 @@ You need a GitHub repository plus accounts for Supabase, Render (or AWS), and
 Vercel. Never paste provider tokens into source files. Store them in the
 provider environment-variable panels.
 
-Generate independent random values for 'SECRET_KEY', 'JWT_SECRET', and
-'NID_SENSOR_API_KEY'. Generate a PBKDF2 password hash with:
-
-~~~powershell
-py -3.11 -c "from src.nid.auth import hash_password; print(hash_password('REPLACE_WITH_PASSWORD'))"
-~~~
-
-Put the output in 'NID_API_USERS_JSON', for example:
-
-~~~json
-{"admin":{"password_hash":"pbkdf2_sha256$...","role":"admin"}}
-~~~
+Render generates independent 'SECRET_KEY', 'JWT_SECRET', and
+'NID_SENSOR_API_KEY' values automatically. The Blueprint only asks you to
+choose a strong 'NID_API_PASSWORD' for the default 'admin' login.
 
 The application has three independently deployable parts:
 
-1. 'frontend/': static SOC dashboard on Vercel.
-2. 'api.py': FastAPI on Render or EC2, connected to managed PostgreSQL.
-3. 'sensor.py': Scapy sensor on the monitored network.
+1. 'frontend/': React/Vite SOC dashboard on Vercel.
+2. 'backend/app.py': FastAPI on Render or EC2, connected to PostgreSQL.
+3. 'detector/realtime_detect.py': Scapy sensor on the monitored network.
 
 The sensor must stay on the monitored machine or gateway. Vercel and Render
 cannot observe packets from your local network.
@@ -37,7 +28,7 @@ connection string. Retain the provider's required SSL parameter:
 postgresql://USER:PASSWORD@HOST:6543/postgres?sslmode=require
 ~~~
 
-Set it as 'NID_POSTGRES_DSN' only on the backend.
+Set it as 'DATABASE_URL' only on the backend.
 
 The backend initializes the schema automatically. For manual Supabase setup,
 open **SQL Editor -> New Query**, paste
@@ -48,17 +39,17 @@ open **SQL Editor -> New Query**, paste
 Push the repository to GitHub, create a Render Blueprint, and select
 'render.yaml'. Configure:
 
-- 'NID_POSTGRES_DSN': managed PostgreSQL connection string.
-- 'NID_API_USERS_JSON': for example
-  '{"analyst":{"password":"LONG_PASSWORD","role":"analyst"}}'.
-- 'NID_API_CORS_ORIGINS': exact Vercel URL.
-- 'NID_SENSOR_API_KEY': a separate random secret shared only with sensors.
-- 'NID_JWT_SECRET': a long random value (Render can generate this).
+- 'DATABASE_URL': managed PostgreSQL connection string.
+- 'NID_API_PASSWORD': strong password for the default 'admin' account.
+
+The Blueprint supplies 'CORS_ORIGINS', 'ALLOWED_HOSTS', and all generated
+secrets. Replace 'CORS_ORIGINS' with the exact Vercel URL after frontend
+deployment.
 
 The container initializes the schema before starting. Verify the public
-liveness path at 'https://YOUR-SERVICE.onrender.com/healthz'.
+liveness path at 'https://YOUR-SERVICE.onrender.com/health'.
 
-For a manual Render service use 'Dockerfile.api' and health path '/healthz'.
+For a manual Render service use 'backend/Dockerfile' and health path '/health'.
 
 Render terminates public HTTPS at its managed proxy, so keep 'FORCE_HTTPS=0'
 there. Enable application-level HTTPS redirects only when proxy forwarding is
