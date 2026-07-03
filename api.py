@@ -246,6 +246,18 @@ def healthz() -> dict[str, str]:
     return {"status": "ok", "version": app.version}
 
 
+@app.get("/", tags=["System"])
+def root() -> dict[str, str]:
+    return {
+        "service": "Sentinel Network Intrusion Detection SOC API",
+        "status": "online",
+        "version": app.version,
+        "health": "/health",
+        "metrics": "/metrics",
+        "documentation": "/docs",
+    }
+
+
 @app.get("/metrics", response_class=PlainTextResponse, tags=["System"])
 def metrics() -> str:
     return prometheus_metrics()

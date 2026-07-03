@@ -126,6 +126,7 @@ class ApiBackendTests(unittest.TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["status"], "ok")
+        self.assertEqual(self.client.get("/").json()["status"], "online")
         self.assertEqual(self.client.get("/health").status_code, 200)
         self.assertIn("nid_api_requests_total", self.client.get("/metrics").text)
 
