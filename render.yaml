@@ -28,6 +28,12 @@ services:
         value: "*.onrender.com"
       - key: RATE_LIMIT_PER_MINUTE
         value: "120"
+      - key: NID_ENRICH_SENSOR_EVENTS
+        value: "1"
+      - key: NID_EXTERNAL_THREAT_INTEL
+        value: "1"
+      - key: NID_SERVER_ALERTS
+        value: "1"
       - key: FORCE_HTTPS
         value: "0"
       - key: PYTHON_VERSION

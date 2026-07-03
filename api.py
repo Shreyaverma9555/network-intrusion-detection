@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+from dataclasses import asdict
 from datetime import datetime, timedelta, timezone
 import hashlib
 import hmac
@@ -32,7 +33,7 @@ from src.nid.processor import ProcessingPolicy, RealTimeProcessor
 from src.nid.pdf_report import build_incident_pdf
 from src.nid.realtime import DetectionEvent
 from src.nid.security_analyst import security_analyst_report
-from src.nid.threat_intel import lookup_ip
+from src.nid.threat_intel import enrich_event, lookup_ip
 from src.nid.visualization import geo_attack_table
 
 
@@ -283,6 +284,13 @@ async def ingest_sensor_event(
 ) -> SensorEventResponse:
     """Accept an already-classified event from a remote Scapy sensor."""
     event = DetectionEvent(**payload.model_dump())
+    RealTimeProcessor._enrich_mitre(event)
+    if os.getenv("NID_ENRICH_SENSOR_EVENTS", "1") == "1":
+        await asyncio.to_thread(
+            enrich_event,
+            event,
+            os.getenv("NID_EXTERNAL_THREAT_INTEL", "1") == "1",
+        )
     try:
         event_id = repository().save(event)
     except Exception as error:
@@ -290,7 +298,14 @@ async def ingest_sensor_event(
     alert_delivery = None
     if event.predicted_attack and os.getenv("NID_SERVER_ALERTS", "0") == "1":
         alert_delivery = await asyncio.to_thread(send_alerts_with_status, event)
-    live_event = payload.model_dump()
+        statistics = event.statistics or {}
+        statistics["notification_channels"] = alert_delivery.sent
+        statistics["notification_errors"] = alert_delivery.errors
+        statistics["notification_status"] = (
+            "sent" if alert_delivery.sent else "not_configured" if not alert_delivery.errors else "failed"
+        )
+        event.statistics = statistics
+    live_event = asdict(event)
     live_event.update({"id": event_id, "created_at": datetime.now(timezone.utc).isoformat()})
     await event_bus.publish({"type": "detection", "event": live_event})
     return SensorEventResponse(
